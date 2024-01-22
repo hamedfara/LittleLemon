@@ -20,20 +20,25 @@ from django.contrib.auth.models import User
 def index(request):
     return render(request, 'index.html', {})
 
-class MenuItemView(generics.ListCreateAPIView):
+class BookingViewSet(ModelViewSet):
+    queryset = Booking.objects.all()
+    serializer_class = BookingSerializer
+    permission_classes = [IsAuthenticated]
+
+class MenuItemView(ListCreateAPIView):
     queryset = Menu.objects.all()
     serializer_class = MenuSerializer
 
-class SingleMenuItemView(generics.RetrieveUpdateAPIView, generics.DestroyAPIView):
+class SingleMenuItemView(RetrieveUpdateAPIView, DestroyAPIView):
     queryset = Menu.objects.all()
     serializer_class = MenuSerializer
 
-class UserViewSet(viewsets.ModelViewSet):
+class UserViewSet(ModelViewSet):
    queryset = User.objects.all()
    serializer_class = UserSerializer
-   permission_classes = [permissions.IsAuthenticated]
+   permission_classes = [IsAuthenticated]
    
 @api_view()
 @permission_classes([IsAuthenticated])
 def msg(request):
-    return Response({"message":"This view is protected"})
+    return Response({"message":"Sorry! You cannot see this view!"})
